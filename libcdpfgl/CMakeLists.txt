@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(Libcdpfgl C)
 
+list(PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-listfiles/")
+
 set(SOURCE_FILES
         libcdpfgl.c
         options.c
@@ -57,6 +59,9 @@ target_link_libraries(libcdpfgl PRIVATE gio-2.0)
 target_link_libraries(libcdpfgl PRIVATE gobject-2.0)
 target_link_libraries(libcdpfgl PRIVATE z)
 
+#MICROHTTPD
+#find_package(libmicrohttpd)
+#target_link_libraries(libcdpfgl PRIVATE libmicrohttpd::libmicrohttpd)
 
 #target_include_directories(libcdpfgl PRIVATE /usr/include/glib-2.0/)
 

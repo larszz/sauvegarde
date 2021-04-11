@@ -44,7 +44,7 @@
 #include <sys/time.h>
 #include <sys/socket.h>
 #include <errno.h>
-#include <microhttpd.h>
+#include <../prebuilt-libs/include/microhttpd.h>
 #include <glib.h>
 #include <gio/gio.h>
 #include <glib/gi18n-lib.h>

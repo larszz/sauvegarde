@@ -42,6 +42,11 @@ add_executable(
 
 
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+target_link_libraries(${EX_NAME} PRIVATE Threads::Threads)
+
+
 set_target_properties(${EX_NAME} PROPERTIES LINKER_LANGUAGE C)
 
 

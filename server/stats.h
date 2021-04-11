@@ -28,7 +28,7 @@
 #ifndef _STATS_H_
 #define _STATS_H_
 
-#include "config.h"
+#include "../config.h"
 
 /**
  * @struct req_get_t

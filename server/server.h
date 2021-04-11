@@ -30,7 +30,7 @@
 #ifndef _SERVER_H_
 #define _SERVER_H_
 
-#include "config.h"
+#include "../config.h"
 
 #define MHD_PLATFORM_H
 #include <stdio.h>

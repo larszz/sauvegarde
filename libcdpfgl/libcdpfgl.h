@@ -30,13 +30,15 @@
 #define _LIBCDPFGL_H_
 
 /* Configuration from ./configure script */
-#include "config.h"
+#include "../config.h"
 
 #define MHD_PLATFORM_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdint.h>
+#include <locale.h>
+#include <glib-2.0/glib-object.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/time.h>

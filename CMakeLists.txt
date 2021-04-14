@@ -19,17 +19,19 @@ add_subdirectory(libcdpfgl)
 
 set(SERVER_SOURCES
         server/server.c
-        server/stats.c
-        server/backend.c
         server/options.c
+        server/backend.c
+        server/file_backend.c
+        server/stats.c
 
         )
 
 set(SERVER_HEADERS
         server/server.h
-        server/stats.h
-        server/backend.h
         server/options.h
+        server/backend.h
+        server/file_backend.h
+        server/stats.h
         )
 
 
@@ -41,20 +43,26 @@ add_executable(
         )
 
 
+
+
+set_target_properties(${EX_NAME} PROPERTIES LINKER_LANGUAGE C)
+
 # solution for pthread issue by "thehouse" and "Alex Reinking", see https://stackoverflow.com/a/29871891
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(${EX_NAME} PRIVATE Threads::Threads)
 
+# math lib
+target_link_libraries(${EX_NAME} PRIVATE m)
 
-set_target_properties(${EX_NAME} PROPERTIES LINKER_LANGUAGE C)
 
-
+# glib
 target_include_directories(${EX_NAME} PRIVATE /usr/include/glib-2.0)
 #target_include_directories(${EX_NAME} PRIVATE /usr/include/glib)
 
 target_link_libraries(${EX_NAME} PRIVATE glib-2.0)
 target_link_libraries(${EX_NAME} PRIVATE jansson)
+#target_link_libraries(${EX_NAME} PRIVATE bits)
 
 
 # gio

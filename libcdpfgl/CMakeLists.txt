@@ -9,18 +9,22 @@ set(SOURCE_FILES
         compress.c
         clock.c
         query.c
+        unpacking.c
         packing.c
         database.c
         communique.c
         hashs.c
         files.c
         configuration.c
+        )
 
+set(HEADER_FILES
         libcdpfgl.h
         options.h
         compress.h
         clock.h
         query.h
+        unpacking.h
         packing.h
         database.h
         communique.h
@@ -33,7 +37,10 @@ set(SOURCE_FILES
 
 
 # add as library
-add_library(libcdpfgl ${SOURCE_FILES})
+add_library(libcdpfgl
+        ${HEADER_FIELS}
+        ${SOURCE_FILES}
+        )
 
 
 # TEST
@@ -56,8 +63,16 @@ target_link_libraries(libcdpfgl PRIVATE glib-2.0)
 target_include_directories(libcdpfgl PRIVATE /usr/include/gio-2.0)
 target_link_libraries(libcdpfgl PRIVATE gio-2.0)
 
+# gobject
 target_link_libraries(libcdpfgl PRIVATE gobject-2.0)
+
 target_link_libraries(libcdpfgl PRIVATE z)
+
+# sqlite
+target_link_libraries(libcdpfgl PRIVATE sqlite3)
+
+# curl
+target_link_libraries(libcdpfgl PRIVATE curl)
 
 #MICROHTTPD
 #find_package(libmicrohttpd)

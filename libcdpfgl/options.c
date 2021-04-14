@@ -36,7 +36,7 @@ srv_conf_t *new_srv_conf_t(void)
 {
     srv_conf_t *srv_conf = NULL;
 
-    srv_conf = (srv_conf_t *) g_malloc0(sizeof(srv_conf));
+    srv_conf = (srv_conf_t *) g_malloc0(sizeof(srv_conf_t));
 
     return srv_conf;
 }
@@ -89,7 +89,7 @@ srv_conf_t *read_from_group_server(GKeyFile *keyfile, gchar *filename)
             srv_conf->backend_meta_label = read_string_from_file(keyfile, filename, GN_SERVER, KN_SERVER_METABACKEND, "Could not load meta backend to use");
 
             /* Reading data backend to use */
-            srv_conf->backend_data_label = read_string_from_file(keyfile, filename, GN_SERVER, KN_SERVER_DATABACKEND, "Could not load data backend to use");
+//            srv_conf->backend_data_label = read_string_from_file(keyfile, filename, GN_SERVER, KN_SERVER_DATABACKEND, "Could not load data backend to use");
         }
 
     return srv_conf;

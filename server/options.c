@@ -130,6 +130,8 @@ static void read_from_configuration_file(options_t *opt, gchar *filename)
                 {
                     srv_conf = read_from_group_server(keyfile, filename);
                     opt->port = srv_conf ->port;
+                    opt->backend_meta = get_backend_number_from_label(srv_conf->backend_meta_label);
+                    opt->backend_data = get_backend_number_from_label(srv_conf->backend_data_label);
                     read_debug_mode_from_file(keyfile, filename);
                 }
             else if (error != NULL)

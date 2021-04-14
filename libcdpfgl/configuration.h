@@ -165,6 +165,10 @@
 #define KN_SERVER_PORT ("server-port")
 
 
+// TODO: comments!
+#define KN_SERVER_METABACKEND ("server-backend-meta")
+#define KN_SERVER_DATABACKEND ("server-backend-data")
+
 /** Below you'll find some definitions for the server's backends */
 /**
  * @def KN_FILE_DIRECTORY
@@ -180,6 +184,9 @@
  * filesystem space and creation time.
  */
 #define KN_DIR_LEVEL ("dir-level")
+
+
+
 
 
 

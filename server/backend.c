@@ -40,7 +40,8 @@
  * @param retrieve_data retrieves data from a specified hash.
  * @returns a newly created backend_t structure initialized to nothing !
  */
-backend_t *init_backend_structure(void *store_smeta, void *store_data, void *init_backend, void *build_needed_hash_list, void *get_list_of_files, void * retrieve_data)
+backend_t *init_backend_structure(void *store_smeta, void *store_data, void *init_backend, void *build_needed_hash_list,
+                                  void *get_list_of_files, void *retrieve_data)
 {
     backend_t *backend = NULL;
 
@@ -58,3 +59,24 @@ backend_t *init_backend_structure(void *store_smeta, void *store_data, void *ini
 }
 
 
+/**
+ * Returns the number of the backend, corresponding to the label
+ * @param label
+ * @return
+ */
+gint get_backend_number_from_label(char *label)
+{
+    if (g_strcmp0(label, BACKEND_FILE_LABEL))
+    {
+        // default file backend
+        return BACKEND_FILE_NUM;
+    } else if (g_strcmp0(label, BACKEND_MONGODB_LABEL))
+    {
+        // MongoDB backend
+        return BACKEND_MONGODB_NUM;
+    } else
+    {
+        // invalid
+        return BACKEND_INVALID_NUM;
+    }
+}

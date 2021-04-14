@@ -38,8 +38,10 @@
  */
 typedef struct
 {
-    gchar *ip;              /**< A string representing the IP address where server is located (may be a hotsname)             */
-    gint port;              /**< Port number on which to send things to cdpfglserver's server (on which it must listen)       */
+    gchar *ip;                      /**< A string representing the IP address where server is located (may be a hotsname)           */
+    gint port;                      /**< Port number on which to send things to cdpfglserver's server (on which it must listen)     */
+    gchar *backend_meta_label;      /**< Label of the backend to use for meta data                                                  */
+    gchar *backend_data_label;      /**< Label of the backend to use for block data                                                  */
 } srv_conf_t;
 
 /**

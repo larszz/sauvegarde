@@ -42,6 +42,8 @@ typedef struct
     gboolean version;   /**< TRUE if we have to display program's version                             */
     gchar *configfile;  /**< filename for the configuration file specified on the command line        */
     gint port;          /**< port number on which the cdpfglserver program will listen for connexions */
+    gint backend_meta;  /**< Number of backend to use for meta data                                   */
+    gint backend_data;  /**< Number of backend to use for data                                        */
 } options_t;
 
 

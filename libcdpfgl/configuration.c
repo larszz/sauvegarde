@@ -218,12 +218,12 @@ gint read_int_from_file(GKeyFile *keyfile, gchar *filename, gchar *groupname, gc
  */
 gboolean read_boolean_from_file(GKeyFile *keyfile, gchar *filename, gchar *groupname, gchar *keyname, gchar *errormsg)
 {
-    gboolean bool = FALSE; /** Boolean to be read    */
+    gboolean b = FALSE; /** Boolean to be read    */
     GError *error = NULL;  /** Glib error handling   */
 
     if (g_key_file_has_key(keyfile, groupname, keyname, &error) == TRUE)
         {
-            bool =  g_key_file_get_boolean(keyfile, groupname, keyname, &error);
+            b =  g_key_file_get_boolean(keyfile, groupname, keyname, &error);
 
             if (error != NULL)
                 {
@@ -241,7 +241,7 @@ gboolean read_boolean_from_file(GKeyFile *keyfile, gchar *filename, gchar *group
             fprintf(stdout, _("Key '%s' in group '%s' of configuration file '%s' not found.\n"), keyname, groupname, filename);
         }
 
-    return bool;
+    return b;
 }
 
 

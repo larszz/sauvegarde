@@ -70,7 +70,9 @@ void free_server_struct_t(server_struct_t *server_struct)
             MHD_stop_daemon(server_struct->d);
             print_debug(_("\tMHD daemon stopped.\n"));
             free_variable(server_struct->backend); /** we need a backend function to be called to free the backend structure */
-            print_debug(_("\tbackend variable freed.\n"));
+            print_debug(_("\tdata backend variable freed.\n"));
+            free_variable(server_struct->backend_meta); /** we need a backend function to be called to free the backend structure */
+            print_debug(_("\tmeta backend variable freed.\n"));
             g_thread_unref(server_struct->data_thread);
             print_debug(_("\tdata thread unreferenced.\n"));
             g_thread_unref(server_struct->meta_thread);

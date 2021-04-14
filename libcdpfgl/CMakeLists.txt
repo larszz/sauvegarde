@@ -5,32 +5,32 @@ list(PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-listfiles/")
 
 set(SOURCE_FILES
         libcdpfgl.c
-        options.c
-        compress.c
-        clock.c
-        query.c
+        configuration.c
+        communique.c
+        files.c
+        hashs.c
         unpacking.c
         packing.c
         database.c
-        communique.c
-        hashs.c
-        files.c
-        configuration.c
+        query.c
+        clock.c
+        compress.c
+        options.c
         )
 
 set(HEADER_FILES
         libcdpfgl.h
-        options.h
-        compress.h
-        clock.h
-        query.h
+        configuration.h
+        communique.h
+        files.h
+        hashs.h
         unpacking.h
         packing.h
         database.h
-        communique.h
-        hashs.h
-        files.h
-        configuration.h
+        query.h
+        clock.h
+        compress.h
+        options.h
 
         ../config.h
         )

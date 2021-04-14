@@ -30,6 +30,19 @@
 #define _SERVER_BACKEND_H_
 
 /**
+ * Backend information to check which backend should be used
+ */
+#define BACKEND_FILE_LABEL ("FILE")
+#define BACKEND_MONGODB_LABEL ("MONGODB")
+
+/** Numbers */
+#define BACKEND_INVALID_NUM -1
+#define BACKEND_FILE_NUM 1
+#define BACKEND_MONGODB_NUM 2
+
+
+
+/**
  * Function templates definition to be used by backend_t structure.
  * void * pointers are ment to be server_struct_t * pointers.
  * @todo have a function that will say if a hash and its associated data
@@ -76,6 +89,14 @@ typedef struct
  * @returns a newly created backend_t structure initialized to nothing !
  */
 extern backend_t *init_backend_structure(void *store_smeta, void *store_data, void *init_backend, void *build_needed_hash_list, void *get_list_of_files, void * retrieve_data);
+
+
+/**
+ * Returns the number of the backend, corresponding to the label
+ * @param label
+ * @return
+ */
+extern gint get_backend_number_from_label(char *label);
 
 
 

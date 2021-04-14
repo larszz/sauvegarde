@@ -3,7 +3,7 @@ project(sauvegarde C)
 
 set(CMAKE_C_STANDARD 11)
 
-set(EX_NAME "sgservertest")
+set(EX_NAME "server")
 
 include_directories(client)
 #include_directories(libcdpfgl)
@@ -22,8 +22,8 @@ set(SERVER_SOURCES
         server/options.c
         server/backend.c
         server/file_backend.c
+        server/mongodb_backend.c
         server/stats.c
-
         )
 
 set(SERVER_HEADERS
@@ -31,6 +31,7 @@ set(SERVER_HEADERS
         server/options.h
         server/backend.h
         server/file_backend.h
+        server/mongodb_backend.h
         server/stats.h
         )
 
@@ -78,6 +79,9 @@ target_link_libraries(${EX_NAME} PRIVATE libmicrohttpd::libmicrohttpd)
 # MONGOC
 target_link_libraries(${EX_NAME} PRIVATE mongo::mongoc_shared)
 find_package(mongoc-1.0 1.7 REQUIRED)
+
+
+
 
 include_directories(${Libcdpfgl_SOURCE_DIR})
 target_link_libraries(${EX_NAME} PRIVATE libcdpfgl)

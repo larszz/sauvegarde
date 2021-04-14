@@ -182,6 +182,40 @@
 #define KN_DIR_LEVEL ("dir-level")
 
 
+
+/** MongoDB Backend */
+/** Settings for log level */
+#define MONGODB_BACKEND_DEBUG 1
+#define MONGODB_BACKEND_VERBOSE_FOR_TESTS 0
+
+/** Keys for settings file **/
+/**
+ * The hostname of the MongoDB server
+ */
+#define KN_MONGODB_HOST ("hostname")
+
+/**
+ * Port to connect to the server
+ */
+#define KN_MONGODB_PORT ("port")
+
+/**
+ * Database to use
+ */
+#define KN_MONGODB_DATABASE ("database")
+
+/**
+ * User to connect to the server
+ */
+#define KN_MONGODB_USER ("user")
+
+/**
+ * The secret key to connect
+ */
+#define KN_MONGODB_KEY ("key")
+
+
+
 /** Below you'll find some definitions for the version cache file */
 /**
  * @def KN_CLIENT_DATABASE

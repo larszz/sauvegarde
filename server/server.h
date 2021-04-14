@@ -99,6 +99,7 @@ typedef struct
     options_t *opt;           /**< Options of the program from the command line    */
     struct MHD_Daemon *d;     /**< libmicrohttpd daemon structure                  */
     backend_t *backend;
+    backend_t *backend_meta;
     GAsyncQueue *meta_queue;  /**< An asynchronous queue where smeta data will
                                *   be transmitted as it arrives                    */
     GAsyncQueue *data_queue;  /**< An asynchronous queue where data will be
@@ -124,6 +125,7 @@ typedef struct
 
 
 #include "file_backend.h"
+#include "mongodb_backend.h"
 #include "stats.h"
 
 #endif /* #ifndef _SERVER_H_ */

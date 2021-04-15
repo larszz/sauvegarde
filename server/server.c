@@ -237,8 +237,9 @@ static server_struct_t *init_server_main_structure(int argc, char **argv)
         }
 
         /* Check validity of backends */
-        if(!check_backends_valid(server_struct->backend_meta, server_struct->backend)){
-            print_error(__FILE__,__LINE__, "Specified backend invalid!\n");
+        if (!check_backends_valid(server_struct->backend_meta, server_struct->backend))
+        {
+            print_error(__FILE__, __LINE__, "Specified backend invalid!\n");
             exit(EXIT_FAILURE);
         }
 
@@ -1417,10 +1418,28 @@ int main(int argc, char **argv)
 
         install_server_signal_traps(server_struct);
 
-        /* Initializing the choosen backend by calling it's function */
+        /* Initialize meta backend if necessary */
+        if (server_struct->backend_meta->init_backend != NULL)
+        {
+            /* Only initialize if not already done (user_data set -> interpreted as already initialized -> skip) */
+            if (server_struct->backend_meta->user_data == NULL)
+            {
+                server_struct->backend_meta->init_backend(server_struct);
+            } else{
+                g_print("Meta Backend: aleady initialized, skipping.\n");
+            }
+        }
+
+        /* Initialize data backend if necessary */
         if (server_struct->backend->init_backend != NULL)
         {
-            server_struct->backend->init_backend(server_struct);
+            /* Only initialize if not already done (user_data set -> interpreted as already initialized -> skip) */
+            if (server_struct->backend->user_data == NULL)
+            {
+                server_struct->backend->init_backend(server_struct);
+            } else{
+                g_print("Data Backend: aleady initialized, skipping.\n");
+            }
         }
 
 

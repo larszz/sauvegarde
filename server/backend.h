@@ -32,13 +32,14 @@
 /**
  * Backend information to check which backend should be used
  */
-#define BACKEND_FILE_LABEL ("FILE")
 #define BACKEND_MONGODB_LABEL ("MONGODB")
+#define BACKEND_FILE_LABEL ("FILE")
 
 /** Numbers */
-#define BACKEND_INVALID_NUM -1
-#define BACKEND_FILE_NUM 1
-#define BACKEND_MONGODB_NUM 2
+#define BACKEND_INVALID_NUM (-1)
+#define BACKEND_UNSET (0)
+#define BACKEND_FILE_NUM (1)
+#define BACKEND_MONGODB_NUM (2)
 
 
 
@@ -57,6 +58,7 @@ typedef void (* store_data_func) (void *, hash_data_t *);            /**< Stores
 typedef GList * (* build_needed_hash_list_func) (void *, GList *);   /**< A function that will check if a hash is already known and build a list
                                                                       *   of needed hashs that the client may send                                                   */
 typedef void (* init_backend_func) (void *);                         /**< A function that will initialize the backend if needed                                      */
+typedef void (* terminate_backend_func) (void *);                         /**< A function that will terminate the backend if needed                                      */
 typedef gchar * (* get_list_of_files_func) (void *, query_t *);      /**< A function that returns a JSON formatted string of saved files corresponding to the query  */
 typedef hash_data_t * (* retrieve_data_func) (void *, gchar *);      /**< A function that returns the buffer associated to a specific hash                           */
 
@@ -71,6 +73,7 @@ typedef struct
     store_data_func store_data;
     build_needed_hash_list_func build_needed_hash_list;
     init_backend_func init_backend;
+    terminate_backend_func terminate_backend;
     get_list_of_files_func get_list_of_files;
     retrieve_data_func retrieve_data;
     void *user_data;                                     /**< user_data should be used by backends to store their own internal structure */
@@ -88,7 +91,7 @@ typedef struct
  * @param retrieve_data retrieves data from a specified hash.
  * @returns a newly created backend_t structure initialized to nothing !
  */
-extern backend_t *init_backend_structure(void *store_smeta, void *store_data, void *init_backend, void *build_needed_hash_list, void *get_list_of_files, void * retrieve_data);
+extern backend_t *init_backend_structure(void *store_smeta, void *store_data, void *init_backend, void *terminate_backend, void *build_needed_hash_list, void *get_list_of_files, void * retrieve_data);
 
 
 /**
@@ -99,6 +102,13 @@ extern backend_t *init_backend_structure(void *store_smeta, void *store_data, vo
 extern gint get_backend_number_from_label(char *label);
 
 
+
+/**
+ * Checks if the passed backends enable all necessary methods
+ * @param backend
+ * @return
+ */
+extern gboolean check_backends_valid(backend_t *backend_meta, backend_t *backend_data);
 
 
 

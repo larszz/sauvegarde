@@ -40,8 +40,8 @@
  * @param retrieve_data retrieves data from a specified hash.
  * @returns a newly created backend_t structure initialized to nothing !
  */
-backend_t *init_backend_structure(void *store_smeta, void *store_data, void *init_backend, void *build_needed_hash_list,
-                                  void *get_list_of_files, void *retrieve_data)
+backend_t *init_backend_structure(void *store_smeta, void *store_data, void *init_backend, void *terminate_backend,
+                                  void *build_needed_hash_list, void *get_list_of_files, void *retrieve_data)
 {
     backend_t *backend = NULL;
 
@@ -51,11 +51,73 @@ backend_t *init_backend_structure(void *store_smeta, void *store_data, void *ini
     backend->store_smeta = store_smeta;
     backend->store_data = store_data;
     backend->init_backend = init_backend;
+    backend->terminate_backend = terminate_backend;
     backend->build_needed_hash_list = build_needed_hash_list;
     backend->get_list_of_files = get_list_of_files;
     backend->retrieve_data = retrieve_data;
 
     return backend;
+}
+
+
+/**
+ * Checks if the passed backends enable all necessary methods
+ * @param backend
+ * @return
+ */
+gboolean check_backends_valid(backend_t *backend_meta, backend_t *backend_data)
+{
+    gboolean valid = TRUE;
+
+    // not valid if no backend passed
+    if (backend_meta == NULL && backend_data == NULL)
+    {
+        print_error(__FILE__, __LINE__, "No backend passed!\n");
+        return FALSE;
+    }
+
+    // store_data
+    if (!((backend_meta != NULL && backend_meta->store_data != NULL) ||
+          (backend_data != NULL && backend_data->store_data != NULL)))
+    {
+        g_print("Missing method in backends: %s\n", "store_data");
+        valid = FALSE;
+    }
+
+    // store_smeta
+    if (!((backend_meta != NULL && backend_meta->store_smeta != NULL) ||
+          (backend_data != NULL && backend_data->store_smeta != NULL)))
+    {
+        g_print("Missing method in backends: %s\n", "store_smeta");
+        valid = FALSE;
+    }
+
+    // build_needed_hash_list
+    if (!((backend_meta != NULL && backend_meta->build_needed_hash_list != NULL) ||
+          (backend_data != NULL && backend_data->build_needed_hash_list != NULL)))
+    {
+        g_print("Missing method in backends: %s\n", "build_needed_hash_list");
+        valid = FALSE;
+    }
+
+    // retrieve_data
+    if (!((backend_meta != NULL && backend_meta->retrieve_data != NULL) ||
+          (backend_data != NULL && backend_data->retrieve_data != NULL)))
+    {
+        g_print("Missing method in backends: %s\n", "retrieve_data");
+        valid = FALSE;
+    }
+
+    // get_list_of_files
+    if (!((backend_meta != NULL && backend_meta->get_list_of_files != NULL) ||
+          (backend_data != NULL && backend_data->get_list_of_files != NULL)))
+    {
+        g_print("Missing method in backends: %s\n", "get_list_of_files");
+        valid = FALSE;
+    }
+
+
+    return valid;
 }
 
 
@@ -66,11 +128,11 @@ backend_t *init_backend_structure(void *store_smeta, void *store_data, void *ini
  */
 gint get_backend_number_from_label(char *label)
 {
-    if (g_strcmp0(label, BACKEND_FILE_LABEL))
+    if (g_strcmp0(label, BACKEND_FILE_LABEL) == 0)
     {
         // default file backend
         return BACKEND_FILE_NUM;
-    } else if (g_strcmp0(label, BACKEND_MONGODB_LABEL))
+    } else if (g_strcmp0(label, BACKEND_MONGODB_LABEL) == 0)
     {
         // MongoDB backend
         return BACKEND_MONGODB_NUM;

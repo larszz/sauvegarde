@@ -71,4 +71,39 @@ typedef struct
 } mongodb_backend_t;
 
 
+
+/**
+ * Initializes the mongodb backend, including the mongoc-structure till client level
+ * (so the collection to use can be different for each sent meta data as well as the cursor etc.)
+ * @param server_struct is the main server structure the mongodb backend is stored into
+ */
+extern void mongodb_init_backend(server_struct_t *server_struct);
+
+
+/**
+ * Terminates the MongoDB backend (including destroying of mongoc client and mongoc_cleanup())
+ * @param server_struct
+ */
+extern void mongodb_terminate_backend(server_struct_t *server_struct);
+
+
+/**
+ * Inserts the passed data to the MongoDB server if found with passed credentials
+ * @param server_struct is the main server structure
+ * @param server_meta is the passed meta data to store into database
+ */
+extern void mongodb_store_smeta(server_struct_t *server_struct, server_meta_data_t *server_meta);
+
+
+/**
+ * Searches for files with properties, specified in query_t
+ * @param server_struct contains all needed information about the main server structure
+ * @param query the query specification, the data is searched with
+ * @return The found hash_data_t, encoded in a JSON string
+ */
+extern gchar *mongodb_get_list_of_files(server_struct_t *server_struct, query_t *query);
+
+
+
+
 #endif //SAUVEGARDE_MONGODB_BACKEND_H

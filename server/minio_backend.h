@@ -11,10 +11,6 @@
 
 
 #include "minio_interface.h"
-#include "configuration.h"
-#include "options.h"
-#include "clock.h"
-#include "misc.h"
 
 
 /**

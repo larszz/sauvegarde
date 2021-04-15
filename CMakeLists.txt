@@ -17,20 +17,31 @@ message("Current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
 add_subdirectory(libcdpfgl)
 
 
+set(MINIO_SOURCES
+        server/minio_backend.c
+        server/minio_interface.c)
+
 set(SERVER_SOURCES
         server/server.c
         server/options.c
         server/backend.c
         server/file_backend.c
+        ${MINIO_SOURCES}
         server/mongodb_backend.c
         server/stats.c
         )
+
+
+set(MINIO_HEADERS
+        server/minio_backend.h
+        server/minio_interface.h)
 
 set(SERVER_HEADERS
         server/server.h
         server/options.h
         server/backend.h
         server/file_backend.h
+        ${MINIO_HEADERS}
         server/mongodb_backend.h
         server/stats.h
         )

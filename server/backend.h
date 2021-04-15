@@ -66,6 +66,8 @@ typedef hash_data_t * (* retrieve_data_func) (void *, gchar *);      /**< A func
 /**
  * @struct backend_t
  * @brief This structure contains pointers to the selected backend functions.
+ * @todo: add the number of backend (already used internally), so the backend can be found when function in any backend
+ *      needs to "find itself" (stored in server_struct_t, either as meta or as data backend)
  */
 typedef struct
 {

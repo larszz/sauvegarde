@@ -5,7 +5,7 @@
 // #include "s3_copy.c"
 
 
-#include "minio_backend.h"
+#include "server.h"
 
 #define HOSTNAME_MAXLENGTH 256
 #define KEY_MAXLENGTH 256
@@ -453,6 +453,8 @@ static bool initBuckets(minio_backend_t *backend)
  * Initializes the MinIO backend
  * @param server_struct: the main server structure which also stores (most of) the initialized server connection parameters
  * @todo: check before init, if necessary libraries are available; print Error and exit otherwise
+ * @todo: add parameter "backend" to be able to use every backend as meta or data backend
+ *        (see i.e. setting user_data below), maybe use if set, server_struct->[some backend which makes sense] else
  */
 void minio_init_backend(server_struct_t *server_struct)
 {
@@ -462,7 +464,7 @@ void minio_init_backend(server_struct_t *server_struct)
     minio_print_info("Initializing MinIO backend...\n");
 
 
-    if (server_struct != NULL && server_struct->backend != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL)
     {
         // Memory alloc
         sec_key = g_malloc0(sizeof(char));
@@ -478,7 +480,7 @@ void minio_init_backend(server_struct_t *server_struct)
                 // test buckets (or add them if configured)
                 if (initBuckets(minio_backend))
                 {
-                    server_struct->backend->user_data = minio_backend;
+                    server_struct->backend_data->user_data = minio_backend;
                     minio_print_info("Backend initialized.\n");
                 } else
                 {
@@ -642,9 +644,9 @@ void minio_store_data(server_struct_t *server_struct, hash_data_t *hash_data)
     minio_print_debug("[%s] MinIO Store Data\n", LOGGING_METHOD_PREFIX_MINIO_SAVEDATA);
 
 
-    if (server_struct != NULL && server_struct->backend != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL)
     {
-        backend = server_struct->backend->user_data;
+        backend = server_struct->backend_data->user_data;
 
         minio_print_debug("[%s] Check buckets.\n", LOGGING_METHOD_PREFIX_MINIO_SAVEDATA);
 
@@ -820,9 +822,9 @@ GList *minio_build_needed_hash_list(server_struct_t *server_struct, GList *hash_
 
     minio_print_debug("[%s] Start building needed hash list...\n", LOGGING_METHOD_PREFIX_MINIO_BUILDHASHLIST);
 
-    if (server_struct != NULL && server_struct->backend != NULL && server_struct->backend->user_data != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->backend_data->user_data != NULL)
     {
-        backend = server_struct->backend->user_data;
+        backend = server_struct->backend_data->user_data;
         bucket = backend->bucketname_data;
 
         // check if bucket available
@@ -962,9 +964,9 @@ hash_data_t *minio_retrieve_data(server_struct_t *server_struct, gchar *hash_str
 
     minio_print_debug("[%s] Start retrieving data...\n", LOGGING_METHOD_PREFIX_MINIO_RETRIEVEDATA);
 
-    if (server_struct != NULL && server_struct->backend != NULL && server_struct->backend->user_data != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->backend_data->user_data != NULL)
     {
-        backend = (minio_backend_t *) server_struct->backend->user_data;
+        backend = (minio_backend_t *) server_struct->backend_data->user_data;
 
         // get filemeta
         if (get_filemeta_values(backend->bucketname_filemeta, hash_string, cmptype, uncmplen))

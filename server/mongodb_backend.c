@@ -185,13 +185,14 @@ static bool read_from_group_mongodb_backend(mongodb_backend_t *backend, char *fi
  * Initializes the mongodb backend, including the mongoc-structure till client level
  * (so the collection to use can be different for each sent meta data as well as the cursor etc.)
  * @param server_struct is the main server structure the mongodb backend is stored into
+ * @todo:use server_struct->backend_meta everywhere!
  */
 void mongodb_init_backend(server_struct_t *server_struct)
 {
     mongodb_print_info("Init MongoDB backend...\n");
     mongodb_backend_t *mongodb_backend;
     mongodb_backend = (mongodb_backend_t *) g_malloc0(sizeof(mongodb_backend_t));
-    if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->opt != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->opt != NULL) // TODO: backend_meta!
     {
         if (read_from_group_mongodb_backend(mongodb_backend, server_struct->opt->configfile))
         {

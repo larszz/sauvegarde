@@ -80,7 +80,8 @@ target_link_libraries(${EX_NAME} PRIVATE libmicrohttpd::libmicrohttpd)
 target_link_libraries(${EX_NAME} PRIVATE mongo::mongoc_shared)
 find_package(mongoc-1.0 1.7 REQUIRED)
 
-
+# MinIO
+target_link_libraries(${EX_NAME} PRIVATE s3)
 
 
 include_directories(${Libcdpfgl_SOURCE_DIR})

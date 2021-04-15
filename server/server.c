@@ -103,11 +103,24 @@ void free_server_struct_t(server_struct_t *server_struct)
     {
         MHD_stop_daemon(server_struct->d);
         print_debug(_("\tMHD daemon stopped.\n"));
-        free_variable(
-                server_struct->backend_data); /** we need a backend function to be called to free the backend structure */
+
+        // terminate data backend if necessary
+        if (server_struct->backend_data != NULL && server_struct->backend_data->terminate_backend != NULL)
+        {
+            server_struct->backend_data->terminate_backend(server_struct->backend_data);
+        }
+        free_backend(server_struct->backend_data);
         print_debug(_("\tdata backend variable freed.\n"));
-        free_variable(
-                server_struct->backend_meta); /** we need a backend function to be called to free the backend structure */
+
+        // terminate meta backend if necessary
+        if (server_struct->backend_meta != NULL && server_struct->backend_meta->terminate_backend != NULL)
+        {
+            server_struct->backend_meta->terminate_backend(server_struct->backend_meta);
+        }
+        if(server_struct->backend_meta == NULL)
+            g_printerr("META already freed!\n");
+        free_backend(server_struct->backend_meta);
+
         print_debug(_("\tmeta backend variable freed.\n"));
         g_thread_unref(server_struct->data_thread);
         print_debug(_("\tdata thread unreferenced.\n"));
@@ -220,9 +233,11 @@ static server_struct_t *init_server_main_structure(int argc, char **argv)
             {
                 // use the default file backend
                 g_print("Meta Backend: %s\n", BACKEND_FILE_LABEL);
-                server_struct->backend_data = init_backend_structure(file_store_smeta, file_store_data, file_init_backend,
+                server_struct->backend_data = init_backend_structure(file_store_smeta, file_store_data,
+                                                                     file_init_backend,
                                                                      NULL,
-                                                                     file_build_needed_hash_list, file_get_list_of_files,
+                                                                     file_build_needed_hash_list,
+                                                                     file_get_list_of_files,
                                                                      file_retrieve_data);
             } else
             {
@@ -960,7 +975,8 @@ static void print_received_data_for_hash(guint8 *hash, gssize size_read)
     gchar *string_read = NULL;
 
     encoded_hash = g_base64_encode(hash, HASH_LEN);
-    string_read = g_strdup_printf("%"G_GSSIZE_FORMAT, size_read);
+    string_read = g_strdup_printf("%"
+    G_GSSIZE_FORMAT, size_read);
 
     print_debug(_("Received data for hash: \"%s\" (%s bytes)\n"), encoded_hash, string_read);
 
@@ -1163,7 +1179,7 @@ process_post_request(server_struct_t *server_struct, struct MHD_Connection *conn
                      const char *upload_data, size_t *upload_data_size)
 {
     int success = MHD_NO;
-    upload_t *pp = (upload_t *) *con_cls;
+    upload_t *pp = (upload_t * ) * con_cls;
     guint64 len = 0;
 
     /* print_debug("%ld, %s, %p\n", *upload_data_size, url, pp); */ /* This is for early debug only ! */
@@ -1425,7 +1441,8 @@ int main(int argc, char **argv)
             if (server_struct->backend_meta->user_data == NULL)
             {
                 server_struct->backend_meta->init_backend(server_struct);
-            } else{
+            } else
+            {
                 g_print("Meta Backend: aleady initialized, skipping.\n");
             }
         }
@@ -1437,7 +1454,8 @@ int main(int argc, char **argv)
             if (server_struct->backend_data->user_data == NULL)
             {
                 server_struct->backend_data->init_backend(server_struct);
-            } else{
+            } else
+            {
                 g_print("Data Backend: aleady initialized, skipping.\n");
             }
         }

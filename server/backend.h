@@ -112,4 +112,11 @@ extern gboolean check_backends_valid(backend_t *backend_meta, backend_t *backend
 
 
 
+/**
+ * Frees possible data stored in backend and backend itself
+ * @param backend
+ */
+extern void free_backend(backend_t *backend);
+
+
 #endif /* #ifndef _SERVER_BACKEND_H_ */

@@ -142,3 +142,15 @@ gint get_backend_number_from_label(char *label)
         return BACKEND_INVALID_NUM;
     }
 }
+
+
+/**
+ * Frees possible data stored in backend and backend itself
+ * @param backend
+ */
+void free_backend(backend_t *backend){
+    if(backend != NULL){
+        g_free(backend->user_data);
+    }
+    g_free(backend);
+}

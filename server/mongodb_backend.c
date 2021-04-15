@@ -223,28 +223,27 @@ void mongodb_init_backend(server_struct_t *server_struct)
 
 /**
  * Terminates the MongoDB backend (including destroying of mongoc client and mongoc_cleanup())
- * @param server_struct
  */
-void mongodb_terminate_backend(server_struct_t *server_struct)
+void mongodb_terminate_backend(backend_t *backend)
 {
-    mongodb_print_info("Terminate MongoDB backend...\n");
+    mongodb_print_verbose("Terminate MongoDB backend...\n");
     mongodb_backend_t *mongodb_backend;
 
+
     // Destroy opened mongoc client
-    if (server_struct != NULL && server_struct->backend_data != NULL)
+    if (backend->user_data != NULL)
     {
-        mongodb_backend = (mongodb_backend_t *) server_struct->backend_meta->user_data;
+        mongodb_backend = (mongodb_backend_t *) backend->user_data;
         if (mongodb_backend != NULL && mongodb_backend->client != NULL)
         {
             // Destroy client
-            mongodb_print_debug("Destroy client\n");
+            mongodb_print_verbose("Destroy client\n");
             mongoc_client_destroy(mongodb_backend->client);
 
             // Clean up mongoc structure
-            mongodb_print_debug("Cleanup MongoC\n");
+            mongodb_print_verbose("Cleanup MongoC\n");
             mongoc_cleanup();
         }
-        free(server_struct->backend_meta->user_data);
     }
     mongodb_print_info("MongoDB backend terminated.\n");
 }

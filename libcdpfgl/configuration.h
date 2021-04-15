@@ -193,7 +193,7 @@
 /** MongoDB Backend */
 /** Settings for log level */
 #define MONGODB_BACKEND_DEBUG 1
-#define MONGODB_BACKEND_VERBOSE_FOR_TESTS 1
+#define MONGODB_BACKEND_VERBOSE_FOR_TESTS 0
 
 /** Keys for settings file **/
 /**

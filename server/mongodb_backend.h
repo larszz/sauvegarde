@@ -82,9 +82,9 @@ extern void mongodb_init_backend(server_struct_t *server_struct);
 
 /**
  * Terminates the MongoDB backend (including destroying of mongoc client and mongoc_cleanup())
- * @param server_struct
  */
-extern void mongodb_terminate_backend(server_struct_t *server_struct);
+void mongodb_terminate_backend(backend_t *backend)
+;
 
 
 /**

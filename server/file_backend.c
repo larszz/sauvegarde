@@ -75,10 +75,10 @@ void file_store_smeta(server_struct_t *server_struct, server_meta_data_t *smeta)
     gchar *link64 = NULL;
 
 
-    if (server_struct != NULL && server_struct->backend != NULL && server_struct->backend->user_data != NULL && smeta != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->backend_data->user_data != NULL && smeta != NULL)
         {
             meta = smeta->meta;
-            file_backend = server_struct->backend->user_data;
+            file_backend = server_struct->backend_data->user_data;
             prefix = g_build_filename((gchar *) file_backend->prefix, "meta", NULL);
 
             if (smeta->hostname != NULL && meta != NULL)
@@ -284,9 +284,9 @@ void file_store_data(server_struct_t *server_struct, hash_data_t *hash_data)
     gchar *prefix = NULL;
     file_backend_t *file_backend = NULL;
 
-    if (server_struct != NULL && server_struct->backend != NULL && server_struct->backend->user_data != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->backend_data->user_data != NULL)
         {
-            file_backend = server_struct->backend->user_data;
+            file_backend = server_struct->backend_data->user_data;
             prefix = g_build_filename((gchar *) file_backend->prefix, "data", NULL);
 
             if (hash_data != NULL && hash_data->hash != NULL && hash_data->data != NULL)
@@ -360,9 +360,9 @@ GList *file_build_needed_hash_list(server_struct_t *server_struct, GList *hash_d
     hash_data_t *needed_hash_data = NULL;
 
 
-    if (server_struct != NULL && server_struct->backend != NULL && server_struct->backend->user_data != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->backend_data->user_data != NULL)
         {
-            file_backend = server_struct->backend->user_data;
+            file_backend = server_struct->backend_data->user_data;
 
             prefix = g_build_filename((gchar *) file_backend->prefix, "data", NULL);
 
@@ -535,7 +535,7 @@ void file_init_backend(server_struct_t *server_struct)
     file_backend_t *file_backend = NULL;
     gchar *path = NULL;
 
-    if (server_struct != NULL && server_struct->backend != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL)
         {
             file_backend = (file_backend_t *) g_malloc0(sizeof(file_backend_t));
 
@@ -549,7 +549,7 @@ void file_init_backend(server_struct_t *server_struct)
                     read_from_group_file_backend(file_backend, server_struct->opt->configfile);
                 }
 
-            server_struct->backend->user_data = file_backend;
+            server_struct->backend_data->user_data = file_backend;
 
             file_create_directory(file_backend->prefix, "meta");
             file_create_directory(file_backend->prefix, "data");
@@ -890,13 +890,13 @@ gchar *file_get_list_of_files(server_struct_t *server_struct, query_t *query)
     GList *file_list = NULL;
 
 
-    if (server_struct != NULL && server_struct->backend != NULL &&  server_struct->backend->user_data != NULL && query != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->backend_data->user_data != NULL && query != NULL)
         {
             print_debug(_("file_backend: filter is: %s && %s && %s && %s\n"), query->filename, query->date, query->afterdate, query->beforedate);
 
             a_regex = g_regex_new(query->filename, G_REGEX_CASELESS, 0, &error);
 
-            file_backend = server_struct->backend->user_data;
+            file_backend = server_struct->backend_data->user_data;
             filename =  g_build_filename(file_backend->prefix, "meta", query->hostname, NULL);
             the_file = g_file_new_for_path(filename);
 
@@ -981,9 +981,9 @@ hash_data_t *file_retrieve_data(server_struct_t *server_struct, gchar *hex_hash)
     gssize uncmplen = 0;
 
 
-    if (server_struct != NULL && server_struct->backend != NULL && server_struct->backend->user_data != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->backend_data->user_data != NULL)
         {
-            file_backend = server_struct->backend->user_data;
+            file_backend = server_struct->backend_data->user_data;
             prefix = g_build_filename((gchar *) file_backend->prefix, "data", NULL);
             hash = string_to_hash(hex_hash);
             path = make_path_from_hash(prefix, hash, file_backend->level);

@@ -104,7 +104,7 @@ void free_server_struct_t(server_struct_t *server_struct)
         MHD_stop_daemon(server_struct->d);
         print_debug(_("\tMHD daemon stopped.\n"));
         free_variable(
-                server_struct->backend); /** we need a backend function to be called to free the backend structure */
+                server_struct->backend_data); /** we need a backend function to be called to free the backend structure */
         print_debug(_("\tdata backend variable freed.\n"));
         free_variable(
                 server_struct->backend_meta); /** we need a backend function to be called to free the backend structure */
@@ -220,10 +220,10 @@ static server_struct_t *init_server_main_structure(int argc, char **argv)
             {
                 // use the default file backend
                 g_print("Meta Backend: %s\n", BACKEND_FILE_LABEL);
-                server_struct->backend = init_backend_structure(file_store_smeta, file_store_data, file_init_backend,
-                                                                NULL,
-                                                                file_build_needed_hash_list, file_get_list_of_files,
-                                                                file_retrieve_data);
+                server_struct->backend_data = init_backend_structure(file_store_smeta, file_store_data, file_init_backend,
+                                                                     NULL,
+                                                                     file_build_needed_hash_list, file_get_list_of_files,
+                                                                     file_retrieve_data);
             } else
             {
                 print_error(__FILE__, __LINE__, "(Internal error) Number of backend to use not handled: %d\n",
@@ -233,11 +233,11 @@ static server_struct_t *init_server_main_structure(int argc, char **argv)
         } else
         {
             g_print("Using specified Backend for Data.\n");
-            server_struct->backend = server_struct->backend_meta;
+            server_struct->backend_data = server_struct->backend_meta;
         }
 
         /* Check validity of backends */
-        if (!check_backends_valid(server_struct->backend_meta, server_struct->backend))
+        if (!check_backends_valid(server_struct->backend_meta, server_struct->backend_data))
         {
             print_error(__FILE__, __LINE__, "Specified backend invalid!\n");
             exit(EXIT_FAILURE);
@@ -266,9 +266,9 @@ static gchar *get_data_from_a_specific_hash(server_struct_t *server_struct, gcha
     hash_data_t *hash_data = NULL;
 
     g_assert_nonnull(server_struct);
-    g_assert_nonnull(server_struct->backend);
+    g_assert_nonnull(server_struct->backend_data);
 
-    backend = server_struct->backend;
+    backend = server_struct->backend_data;
 
     if (backend->retrieve_data != NULL)
     {
@@ -369,9 +369,9 @@ static gchar *get_a_list_of_files(server_struct_t *server_struct, struct MHD_Con
 
 
     g_assert_nonnull(server_struct);
-    g_assert_nonnull(server_struct->backend);
+    g_assert_nonnull(server_struct->backend_meta);
 
-    backend = server_struct->backend;
+    backend = server_struct->backend_meta;
 
     if (backend->get_list_of_files != NULL)
     {
@@ -435,7 +435,7 @@ static gchar *get_data_from_a_list_of_hashs(server_struct_t *server_struct, stru
     GList *header_hdl = NULL;
     hash_data_t *header_hd = NULL;
     hash_data_t *hash_data = NULL;
-    backend_t *backend = server_struct->backend;
+    backend_t *backend = server_struct->backend_data;
     guint size = 0;
     guint buffer_len = 0;
     guchar *concat = NULL;
@@ -823,11 +823,11 @@ static json_t *find_needed_hashs(server_struct_t *server_struct, GList *hash_dat
      * function we are returning the whole hash_data_list !
      */
     g_assert_nonnull(server_struct);
-    g_assert_nonnull(server_struct->backend);
+    g_assert_nonnull(server_struct->backend_data);
 
-    if (server_struct->backend->build_needed_hash_list != NULL)
+    if (server_struct->backend_data->build_needed_hash_list != NULL)
     {
-        needed = server_struct->backend->build_needed_hash_list(server_struct, hash_data_list);
+        needed = server_struct->backend_data->build_needed_hash_list(server_struct, hash_data_list);
         array = convert_hash_list_to_json(needed);
         g_list_free_full(needed, free_hdt_struct);
     } else
@@ -1285,11 +1285,11 @@ static gpointer meta_data_thread(gpointer user_data)
     server_meta_data_t *smeta = NULL;
 
     g_assert_nonnull(server_struct);
-    g_assert_nonnull(server_struct->backend);
+    g_assert_nonnull(server_struct->backend_meta);
 
     if (server_struct->meta_queue != NULL)
     {
-        if (server_struct->backend->store_smeta != NULL)
+        if (server_struct->backend_meta->store_smeta != NULL)
         {
 
             while (TRUE)
@@ -1300,7 +1300,7 @@ static gpointer meta_data_thread(gpointer user_data)
                 {
                     print_debug(_("meta_data_thread: received from %s meta for file %s\n"), smeta->hostname,
                                 smeta->meta->name);
-                    server_struct->backend->store_smeta(server_struct, smeta);
+                    server_struct->backend_meta->store_smeta(server_struct, smeta);
                     free_smeta_data_t(smeta);
                 } else
                 {
@@ -1332,12 +1332,12 @@ static gpointer data_thread(gpointer user_data)
     hash_data_t *hash_data = NULL;
 
     g_assert_nonnull(dt_server_struct);
-    g_assert_nonnull(dt_server_struct->backend);
+    g_assert_nonnull(dt_server_struct->backend_data);
 
     if (dt_server_struct->meta_queue != NULL)
     {
 
-        if (dt_server_struct->backend->store_data != NULL)
+        if (dt_server_struct->backend_data->store_data != NULL)
         {
 
             while (TRUE)
@@ -1346,7 +1346,7 @@ static gpointer data_thread(gpointer user_data)
 
                 if (hash_data != NULL)
                 {
-                    dt_server_struct->backend->store_data(dt_server_struct, hash_data);
+                    dt_server_struct->backend_data->store_data(dt_server_struct, hash_data);
                 }
             }
         } else
@@ -1411,7 +1411,7 @@ int main(int argc, char **argv)
 
     if (server_struct != NULL
         && server_struct->opt != NULL
-        && server_struct->backend != NULL &&
+        && server_struct->backend_data != NULL &&
         server_struct->backend_meta != NULL)
     {
         server_struct->loop = g_main_loop_new(g_main_context_default(), FALSE);
@@ -1431,12 +1431,12 @@ int main(int argc, char **argv)
         }
 
         /* Initialize data backend if necessary */
-        if (server_struct->backend->init_backend != NULL)
+        if (server_struct->backend_data->init_backend != NULL)
         {
             /* Only initialize if not already done (user_data set -> interpreted as already initialized -> skip) */
-            if (server_struct->backend->user_data == NULL)
+            if (server_struct->backend_data->user_data == NULL)
             {
-                server_struct->backend->init_backend(server_struct);
+                server_struct->backend_data->init_backend(server_struct);
             } else{
                 g_print("Data Backend: aleady initialized, skipping.\n");
             }

@@ -191,7 +191,7 @@ void mongodb_init_backend(server_struct_t *server_struct)
     mongodb_print_info("Init MongoDB backend...\n");
     mongodb_backend_t *mongodb_backend;
     mongodb_backend = (mongodb_backend_t *) g_malloc0(sizeof(mongodb_backend_t));
-    if (server_struct != NULL && server_struct->backend != NULL && server_struct->opt != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->opt != NULL)
     {
         if (read_from_group_mongodb_backend(mongodb_backend, server_struct->opt->configfile))
         {
@@ -231,7 +231,7 @@ void mongodb_terminate_backend(server_struct_t *server_struct)
     mongodb_backend_t *mongodb_backend;
 
     // Destroy opened mongoc client
-    if (server_struct != NULL && server_struct->backend != NULL)
+    if (server_struct != NULL && server_struct->backend_data != NULL)
     {
         mongodb_backend = (mongodb_backend_t *) server_struct->backend_meta->user_data;
         if (mongodb_backend != NULL && mongodb_backend->client != NULL)
@@ -414,7 +414,7 @@ void mongodb_store_smeta(server_struct_t *server_struct, server_meta_data_t *ser
     if (server_meta != NULL && server_meta->hostname != NULL && server_meta->meta != NULL)
     {
         collection_name = get_collection_name(server_meta->hostname);
-        if (collection_name != NULL && server_struct != NULL && server_struct->backend != NULL &&
+        if (collection_name != NULL && server_struct != NULL && server_struct->backend_data != NULL &&
             server_struct->backend_meta->user_data != NULL)
         {
             backend = (mongodb_backend_t *) server_struct->backend_meta->user_data;
@@ -705,7 +705,7 @@ gchar *mongodb_get_list_of_files(server_struct_t *server_struct, query_t *query)
         {
             collection_name = get_collection_name(query->hostname);
 
-            if (collection_name != NULL && server_struct != NULL && server_struct->backend != NULL &&
+            if (collection_name != NULL && server_struct != NULL && server_struct->backend_data != NULL &&
                 server_struct->backend_meta->user_data != NULL)
             {
                 backend = (mongodb_backend_t *) server_struct->backend_meta->user_data;

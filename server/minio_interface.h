@@ -18,7 +18,6 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include "libs3.h"
-//#include "misc.h"
 
 
 extern bool S3_init_with_parameters(const char *hostname, const char *access_key, const char *secret_key);

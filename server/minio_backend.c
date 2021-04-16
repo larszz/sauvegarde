@@ -10,12 +10,10 @@
 #define HOSTNAME_MAXLENGTH 256
 #define KEY_MAXLENGTH 256
 
-// MINIO DEFAULT SETTINGS (TODO DELETE when can be read from config)
+/**
+ * MinIO default settings
+ */
 #define MINIO_DEFAULT_HOSTNAME "localhost:9000"
-#define MINIO_ACCESSKEY "minio"
-#define MINIO_SECKEY "klav_klinke_lampe"
-
-// TODO DELETE when bucketname_data created by client name
 #define MINIO_BUCKET_DEFAULT_DATA "testbucket"
 #define MINIO_BUCKET_DEFAULT_FILEMETA "testbucket-meta"
 
@@ -24,44 +22,6 @@
 
 // Read from config if available, only use as default if not configurated
 #define CREATE_BUCKET_IF_MISSING 1     /** defines, if new bucket is created if it's missing */ \
-
-
-
-void putTest()
-{
-    const char *targetKeyFile = "testfromfile_07";
-    const char *targetKeyMem = "testfrommem_10";
-    const char *target_bucket = "testbucket";
-    const char *sourceFilePath = "/home/work/test/testdata/testcomparememorytest.txt";
-    char *datatowrite = "Some in-memory test?_&%(T(&/$§(A)(DäolÄÖÜ?ß@€";
-
-    // put_object(targetKeyFile, sourceFilePath, NULL);
-    put_object(target_bucket, targetKeyMem, datatowrite);
-}
-
-
-void getTest()
-{
-    const char *sourceKey = "testfrommem_09";
-    const char *filepath = "/home/work/test/testdata/output/outputtest01.txt";
-    char *buf;
-    long content_length = 0;
-
-    // Init
-
-
-    FILE *outfile = g_malloc0(sizeof(FILE));
-    size_t *read = g_malloc0(sizeof(size_t));
-
-    buf = get_object(MINIO_BUCKET_DEFAULT_DATA, sourceKey, read);
-
-    if (buf)
-    {
-        fprintf(stdout, "Found in buf:\n%s\n", buf);
-    }
-
-    print_debug("\nDone.\n");
-}
 
 
 // Logging helpers
@@ -146,9 +106,6 @@ static void minio_print_critical(const char *format, ...)
 
 
 // Actual init
-
-
-
 /** Prefix for logging in configuration methods */
 #define LOGGING_METHOD_PREFIX_MINIO_CONFIG ("Config")
 

@@ -126,6 +126,7 @@ typedef struct
 
 #include "file_backend.h"
 #include "mongodb_backend.h"
+#include "minio_backend.h"
 #include "stats.h"
 
 #endif /* #ifndef _SERVER_H_ */

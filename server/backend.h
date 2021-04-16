@@ -32,14 +32,16 @@
 /**
  * Backend information to check which backend should be used
  */
-#define BACKEND_MONGODB_LABEL ("MONGODB")
 #define BACKEND_FILE_LABEL ("FILE")
+#define BACKEND_MONGODB_LABEL ("MONGODB")
+#define BACKEND_MINIO_LABEL ("MINIO")
 
 /** Numbers */
 #define BACKEND_INVALID_NUM (-1)
 #define BACKEND_UNSET (0)
 #define BACKEND_FILE_NUM (1)
 #define BACKEND_MONGODB_NUM (2)
+#define BACKEND_MINIO_NUM (3)
 
 
 
@@ -66,6 +68,8 @@ typedef hash_data_t * (* retrieve_data_func) (void *, gchar *);      /**< A func
 /**
  * @struct backend_t
  * @brief This structure contains pointers to the selected backend functions.
+ * @todo: add the number of backend (already used internally), so the backend can be found when function in any backend
+ *      needs to "find itself" (stored in server_struct_t, either as meta or as data backend)
  */
 typedef struct
 {

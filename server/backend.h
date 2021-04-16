@@ -32,14 +32,16 @@
 /**
  * Backend information to check which backend should be used
  */
-#define BACKEND_MONGODB_LABEL ("MONGODB")
 #define BACKEND_FILE_LABEL ("FILE")
+#define BACKEND_MONGODB_LABEL ("MONGODB")
+#define BACKEND_MINIO_LABEL ("MINIO")
 
 /** Numbers */
 #define BACKEND_INVALID_NUM (-1)
 #define BACKEND_UNSET (0)
 #define BACKEND_FILE_NUM (1)
 #define BACKEND_MONGODB_NUM (2)
+#define BACKEND_MINIO_NUM (3)
 
 
 

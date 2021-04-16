@@ -18,7 +18,7 @@
 #define MONGOC_OWN_LESS_THAN_EQUAL ("$lte")
 
 
-#define MONGODB_LOG_PREFIX ("[MongoDB Backend] ")
+#define MONGODB_LOG_PREFIX ("[MongoDB] ")
 
 /**
  * Labels for storing the meta data in MongoDB document

@@ -119,7 +119,8 @@ void free_server_struct_t(server_struct_t *server_struct)
         }
         if (server_struct->backend_meta == NULL)
             g_printerr("META already freed!\n");
-        free_backend(server_struct->backend_meta);
+        else
+            free_backend(server_struct->backend_meta);
 
         print_debug(_("\tmeta backend variable freed.\n"));
         g_thread_unref(server_struct->data_thread);
@@ -1439,7 +1440,8 @@ int main(int argc, char **argv)
 
     if (CLOCK_T_OUTPUT_TO_FILE == 1)
         init_clock_t(CLOCK_T_PATH);
-    else{
+    else
+    {
         init_clock_t(NULL);
     }
 

@@ -156,6 +156,6 @@ void free_backend(backend_t *backend)
     if (backend != NULL)
     {
         g_free(backend->user_data);
+        g_free(backend);
     }
-    g_free(backend);
 }

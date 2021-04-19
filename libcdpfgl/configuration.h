@@ -63,6 +63,7 @@
 #define GN_SERVER ("Server")
 #define GN_ALL ("All")
 #define GN_FILE_BACKEND ("File_Backend")
+#define GN_MINIO_BACKEND ("Minio_Backend")
 #define GN_VERSION ("Version")
 
 
@@ -187,13 +188,18 @@
 
 
 
-
-
-
 /** MongoDB Backend */
 /** Settings for log level */
 #define MONGODB_BACKEND_DEBUG 1
 #define MONGODB_BACKEND_VERBOSE_FOR_TESTS 0
+
+
+
+/** MinIO Backend */
+/** Settings for log level */
+#define MINIO_BACKEND_DEBUG 1
+#define MINIO_BACKEND_TRACE 0
+#define MINIO_BACKEND_LOG_CLOCK 0
 
 /** Keys for settings file **/
 /**
@@ -221,6 +227,49 @@
  */
 #define KN_MONGODB_KEY ("key")
 
+
+
+
+/** MinIO Backend */
+/**
+ * @def KN_MINIO_HOSTNAME
+ * The hostname of the MinIO server
+ */
+#define KN_MINIO_HOSTNAME "hostname"
+
+
+/**
+ * @def KN_MINIO_ACCESSKEY
+ * Access key (the user) to connect to MinIO server
+ */
+#define KN_MINIO_ACCESSKEY "access-key"
+
+
+/**
+ * @def KN_MINIO_SECRETKEY
+ * Secret key to connect to MinIO server
+ */
+#define KN_MINIO_SECRETKEY "secret-key"
+
+
+/**
+ * @def KN_MINIO_BUCKET_DATA
+ * Bucket to store data into
+ */
+#define KN_MINIO_BUCKET_DATA "bucket-data"
+
+
+/**
+ * @def KN_MINIO_BUCKET_FILEMETA
+ * Bucket to store the filemeta into
+ */
+#define KN_MINIO_BUCKET_FILEMETA "bucket-filemeta"
+
+/**
+ * @def KN_MINIO_ADD_MISSING_BUCKET
+ * Defines, if a bucket should be added if it is not available already
+ */
+#define KN_MINIO_ADD_MISSING_BUCKET "add-missing-bucket"
 
 
 /** Below you'll find some definitions for the version cache file */

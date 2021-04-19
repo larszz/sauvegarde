@@ -117,7 +117,7 @@ void free_server_struct_t(server_struct_t *server_struct)
         {
             server_struct->backend_meta->terminate_backend(server_struct->backend_meta);
         }
-        if(server_struct->backend_meta == NULL)
+        if (server_struct->backend_meta == NULL)
             g_printerr("META already freed!\n");
         free_backend(server_struct->backend_meta);
 
@@ -233,12 +233,26 @@ static server_struct_t *init_server_main_structure(int argc, char **argv)
             {
                 // use the default file backend
                 g_print("Meta Backend: %s\n", BACKEND_FILE_LABEL);
-                server_struct->backend_data = init_backend_structure(file_store_smeta, file_store_data,
+                server_struct->backend_data = init_backend_structure(file_store_smeta,
+                                                                     file_store_data,
                                                                      file_init_backend,
                                                                      NULL,
                                                                      file_build_needed_hash_list,
                                                                      file_get_list_of_files,
                                                                      file_retrieve_data);
+            } else if (server_struct->opt->backend_data == BACKEND_MINIO_NUM)
+            {
+                // MinIO Backend
+                g_print("Meta Backend: %s\n", BACKEND_MINIO_LABEL);
+                server_struct->backend_data = init_backend_structure(NULL,
+                                                                     minio_store_data,
+                                                                     minio_init_backend,
+                                                                     minio_terminate_backend,
+                                                                     minio_build_needed_hash_list,
+                                                                     NULL,
+                                                                     minio_retrieve_data);
+
+
             } else
             {
                 print_error(__FILE__, __LINE__, "(Internal error) Number of backend to use not handled: %d\n",
@@ -247,7 +261,7 @@ static server_struct_t *init_server_main_structure(int argc, char **argv)
             }
         } else
         {
-            g_print("Using specified Backend for Data.\n");
+            g_print("Using Meta Backend also for Data.\n");
             server_struct->backend_data = server_struct->backend_meta;
         }
 
@@ -976,7 +990,7 @@ static void print_received_data_for_hash(guint8 *hash, gssize size_read)
 
     encoded_hash = g_base64_encode(hash, HASH_LEN);
     string_read = g_strdup_printf("%"
-    G_GSSIZE_FORMAT, size_read);
+                                  G_GSSIZE_FORMAT, size_read);
 
     print_debug(_("Received data for hash: \"%s\" (%s bytes)\n"), encoded_hash, string_read);
 
@@ -1179,7 +1193,7 @@ process_post_request(server_struct_t *server_struct, struct MHD_Connection *conn
                      const char *upload_data, size_t *upload_data_size)
 {
     int success = MHD_NO;
-    upload_t *pp = (upload_t * ) * con_cls;
+    upload_t *pp = (upload_t *) *con_cls;
     guint64 len = 0;
 
     /* print_debug("%ld, %s, %p\n", *upload_data_size, url, pp); */ /* This is for early debug only ! */

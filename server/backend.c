@@ -136,6 +136,9 @@ gint get_backend_number_from_label(char *label)
     {
         // MongoDB backend
         return BACKEND_MONGODB_NUM;
+    } else if (g_strcmp0(label, BACKEND_MINIO_LABEL) == 0)
+    {
+        return BACKEND_MINIO_NUM;
     } else
     {
         // invalid
@@ -148,8 +151,10 @@ gint get_backend_number_from_label(char *label)
  * Frees possible data stored in backend and backend itself
  * @param backend
  */
-void free_backend(backend_t *backend){
-    if(backend != NULL){
+void free_backend(backend_t *backend)
+{
+    if (backend != NULL)
+    {
         g_free(backend->user_data);
     }
     g_free(backend);

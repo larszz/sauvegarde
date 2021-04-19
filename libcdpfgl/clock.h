@@ -27,6 +27,12 @@
 #ifndef _CLOCK_H_
 #define _CLOCK_H_
 
+/** Write clock output to file for tests */
+#define CLOCK_T_OUTPUT_TO_FILE (0)
+
+/** Filepath for clock output */
+#define CLOCK_T_PATH ("/home/work/CLionProjects/sauvegardeOriginal/clockfile.txt")
+
 /**
  * @struct a_clock_t
  * @brief Structure to store clock information in order to measure
@@ -37,6 +43,17 @@ typedef struct
     GDateTime *begin;  /** begin is filled when initializing the structure */
     GDateTime *end;    /** end is filled when freeing the structure */
 } a_clock_t;
+
+
+/**
+ * Stores the file to write the output to
+ */
+static GFile *a_clock_out;
+
+/**
+ * Initializes a clock file to write output to
+ */
+void init_clock_t(char *filepath);
 
 
 /**

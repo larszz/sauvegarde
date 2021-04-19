@@ -1437,6 +1437,20 @@ int main(int argc, char **argv)
 
     init_international_languages();
 
+    if (CLOCK_T_OUTPUT_TO_FILE == 1)
+        init_clock_t(CLOCK_T_PATH);
+    else{
+        init_clock_t(NULL);
+    }
+
+    for(int i=0; i<20; i++){
+        a_clock_t *clock = new_clock_t();
+        printf("Some output you know...%d \n", i);
+
+        end_clock(clock, "End of testclock");
+
+    }
+
     server_struct = init_server_main_structure(argc, argv);
 
     if (server_struct != NULL

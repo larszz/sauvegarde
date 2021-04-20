@@ -260,10 +260,10 @@
 
 
 /**
- * @def KN_MINIO_BUCKET_FILEMETA
- * Bucket to store the filemeta into
+ * @def KN_MINIO_BUCKET_BLOCKMETA
+ * Bucket to store the blockmeta into
  */
-#define KN_MINIO_BUCKET_FILEMETA "bucket-filemeta"
+#define KN_MINIO_BUCKET_BLOCKMETA "bucket-blockmeta"
 
 /**
  * @def KN_MINIO_ADD_MISSING_BUCKET

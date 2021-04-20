@@ -151,7 +151,7 @@ bool get_params_from_keyfile(minio_backend_t *backend, char **secret_key, char *
                                             "Secret key not found in config!");
         bucketname_data = read_string_from_file(keyfile, filepath, GN_MINIO_BACKEND, KN_MINIO_BUCKET_DATA,
                                                 "Data bucket not found in config!");
-        bucketname_filemeta = read_string_from_file(keyfile, filepath, GN_MINIO_BACKEND, KN_MINIO_BUCKET_FILEMETA,
+        bucketname_filemeta = read_string_from_file(keyfile, filepath, GN_MINIO_BACKEND, KN_MINIO_BUCKET_BLOCKMETA,
                                                     "Filemeta bucket not found in config!");
         add_missing_bucket = read_boolean_from_file(keyfile, filepath, GN_MINIO_BACKEND, KN_MINIO_ADD_MISSING_BUCKET,
                                                     "'Add missing bucket' not found in config!");
@@ -208,7 +208,7 @@ bool get_params_from_keyfile(minio_backend_t *backend, char **secret_key, char *
     {
         minio_print_debug("[%s] Set key value [%-12s] with default:\t'%d'\n",
                           LOGGING_METHOD_PREFIX_MINIO_CONFIG,
-                          KN_MINIO_BUCKET_FILEMETA,
+                          KN_MINIO_BUCKET_BLOCKMETA,
                           MINIO_BUCKET_DEFAULT_FILEMETA);
         bucketname_filemeta = MINIO_BUCKET_DEFAULT_FILEMETA;
     }

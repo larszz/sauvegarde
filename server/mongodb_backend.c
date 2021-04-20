@@ -300,7 +300,8 @@ bool add_list_values_to_bson(bson_t *document, char *bson_key, GList *list)
             if (MONGODB_BACKEND_CONVERT_HASH_BASE64)
             {
                 mongodb_print_verbose("Convert List value to Base64: %s\n", hash_insert);
-                hash_insert = (unsigned char *) g_base64_encode(hash_data->hash, HASH_LEN);
+                // hash_insert = (unsigned char *) g_base64_encode(hash_data->hash, HASH_LEN);
+                hash_insert = (unsigned char *) hash_to_string(hash_data->hash);
             }
 
             mongodb_print_verbose("Writing list value: %s\n", hash_insert);
@@ -557,6 +558,7 @@ static void init_meta_data_from_bson(meta_data_t *meta_data, const bson_t *docum
     bson_iter_t iter; // = malloc(sizeof(bson_iter_t));
     bson_iter_t child; // = malloc(sizeof(bson_iter_t));
     char *hash;
+    guint8 *ret_hash;
     gsize *len = NULL;
     hash_data_t *hash_data;
 
@@ -645,12 +647,12 @@ static void init_meta_data_from_bson(meta_data_t *meta_data, const bson_t *docum
                     // decode hash from base64 if base64-encoding is set
                     if (MONGODB_BACKEND_CONVERT_HASH_BASE64)
                     {
-                        len = g_malloc0(sizeof(len));
-                        g_base64_decode_inplace(hash, len);
-                        g_free(len);
+                        ret_hash = string_to_hash(hash);
+                    } else {
+                        ret_hash = (unsigned char *) hash;
                     }
 
-                    hash_data = new_hash_data_t_as_is(NULL, 0, (unsigned char *) hash, COMPRESS_NONE_TYPE, 0);
+                    hash_data = new_hash_data_t_as_is(NULL, 0, ret_hash, COMPRESS_NONE_TYPE, 0);
 //                    hash_data = new_hash_data_t(NULL, 0, (unsigned char *) hash, meta_data->);
                     meta_data->hash_data_list = g_list_prepend(meta_data->hash_data_list, hash_data);
                 }

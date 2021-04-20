@@ -59,7 +59,7 @@
 /**
  * Defines if Hashes will be encoded
  */
-#define MONGODB_BACKEND_CONVERT_HASH_BASE64 0
+#define MONGODB_BACKEND_CONVERT_HASH_BASE64 1
 
 typedef struct
 {

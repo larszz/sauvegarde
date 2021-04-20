@@ -31,7 +31,7 @@
 #define CLOCK_T_OUTPUT_TO_FILE (0)
 
 /** Filepath for clock output */
-#define CLOCK_T_PATH ("/home/work/CLionProjects/sauvegardeOriginal/clockfile.txt")
+#define CLOCK_T_PATH ("/usr/local/etc/cdpfgl/clockfile.txt")
 
 /**
  * @struct a_clock_t

@@ -284,6 +284,8 @@ void file_store_data(server_struct_t *server_struct, hash_data_t *hash_data)
     gchar *prefix = NULL;
     file_backend_t *file_backend = NULL;
 
+    a_clock_t *clock = new_clock_t();
+
     if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->backend_data->user_data != NULL)
         {
             file_backend = server_struct->backend_data->user_data;
@@ -335,6 +337,8 @@ void file_store_data(server_struct_t *server_struct, hash_data_t *hash_data)
 
             free_variable(prefix);
         }
+
+    end_clock(clock, "File: StoreData");
 }
 
 
@@ -359,6 +363,7 @@ GList *file_build_needed_hash_list(server_struct_t *server_struct, GList *hash_d
     hash_data_t *hash_data = NULL;
     hash_data_t *needed_hash_data = NULL;
 
+    a_clock_t *clock = new_clock_t();
 
     if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->backend_data->user_data != NULL)
         {
@@ -397,6 +402,8 @@ GList *file_build_needed_hash_list(server_struct_t *server_struct, GList *hash_d
             needed = g_list_reverse(needed);
             free_variable(prefix);
         }
+
+    end_clock(clock, "File: BuildNeededHashList");
 
     return needed;
 }
@@ -889,6 +896,7 @@ gchar *file_get_list_of_files(server_struct_t *server_struct, query_t *query)
     GRegex *a_regex = NULL;
     GList *file_list = NULL;
 
+    a_clock_t *clock = new_clock_t();
 
     if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->backend_data->user_data != NULL && query != NULL)
         {
@@ -949,6 +957,8 @@ gchar *file_get_list_of_files(server_struct_t *server_struct, query_t *query)
     json_decref(array);
     json_decref(root);
 
+    end_clock(clock, "File: GetListOfFiles");
+
     return json_string;
 }
 
@@ -980,6 +990,7 @@ hash_data_t *file_retrieve_data(server_struct_t *server_struct, gchar *hex_hash)
     gshort cmptype = 0;
     gssize uncmplen = 0;
 
+    a_clock_t *clock = new_clock_t();
 
     if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->backend_data->user_data != NULL)
         {
@@ -1030,6 +1041,8 @@ hash_data_t *file_retrieve_data(server_struct_t *server_struct, gchar *hex_hash)
             free_variable(path);
             free_variable(prefix);
         }
+
+    end_clock(clock, "File: RetrieveData");
 
     return hash_data;
 }

@@ -503,7 +503,7 @@ static gchar *generate_filemeta_objectkey(const gchar *hash_string)
  */
 static bool save_filemeta_to_bucket(const gchar *bucketname, const gchar *hash_string, gssize uncmplen, gshort cmptype)
 {
-    a_clock_t *clock = new_clock_t();
+//    a_clock_t *clock = new_clock_t();
     minio_print_debug("[%s] Saving filemeta...\n", LOGGING_METHOD_PREFIX_MINIO_SAVEDATA);
 
     if (bucketname != NULL && hash_string != NULL)
@@ -532,13 +532,13 @@ static bool save_filemeta_to_bucket(const gchar *bucketname, const gchar *hash_s
 
         g_key_file_free(keyfile);
         free_variable(objectkey);
-        end_clock(clock, "save filemeta");
+//        end_clock(clock, "save filemeta");
 
         return true;
     } else
     {
         minio_print_error("[%s] Bucketname or Hashstring NULL!\n", LOGGING_METHOD_PREFIX_MINIO_SAVEDATA);
-        end_clock(clock, "save filemeta");
+//        end_clock(clock, "save filemeta");
         return false;
     }
 }
@@ -556,13 +556,13 @@ static bool save_data_to_bucket(const gchar *bucketname, const gchar *hash_strin
 {
     minio_print_debug("[%s] Saving data...\n", LOGGING_METHOD_PREFIX_MINIO_SAVEDATA);
 
-    a_clock_t *clock;
+//    a_clock_t *clock;
     if (bucketname != NULL && hash_string != NULL && data != NULL)
     {
-        clock = new_clock_t();
+//        clock = new_clock_t();
         minio_print_verbose("[%s] Save data (%s)\n", LOGGING_METHOD_PREFIX_MINIO_SAVEDATA, hash_string);
         put_object(bucketname, hash_string, data);
-        end_clock(clock, "save data");
+//        end_clock(clock, "save data");
 
         minio_print_debug("[%s] Data saved.\n", LOGGING_METHOD_PREFIX_MINIO_SAVEDATA);
         return true;
@@ -600,7 +600,7 @@ void minio_store_data(server_struct_t *server_struct, hash_data_t *hash_data)
 
     minio_print_debug("[%s] MinIO Store Data\n", LOGGING_METHOD_PREFIX_MINIO_SAVEDATA);
 
-
+    clock = new_clock_t();
     if (server_struct != NULL && server_struct->backend_data != NULL)
     {
         backend = server_struct->backend_data->user_data;
@@ -748,6 +748,8 @@ void minio_store_data(server_struct_t *server_struct, hash_data_t *hash_data)
                              LOGGING_METHOD_PREFIX_MINIO_SAVEDATA);
     }
 
+    end_clock(clock, "MinIO: StoreData");
+
     minio_print_debug("[%s] Store Data done.\n\n", LOGGING_METHOD_PREFIX_MINIO_SAVEDATA);
 }
 
@@ -777,6 +779,7 @@ GList *minio_build_needed_hash_list(server_struct_t *server_struct, GList *hash_
     gchar *hash_string;
     head = hash_list;
 
+    a_clock_t *clock = new_clock_t();
     minio_print_debug("[%s] Start building needed hash list...\n", LOGGING_METHOD_PREFIX_MINIO_BUILDHASHLIST);
 
     if (server_struct != NULL && server_struct->backend_data != NULL && server_struct->backend_data->user_data != NULL)
@@ -825,6 +828,8 @@ GList *minio_build_needed_hash_list(server_struct_t *server_struct, GList *hash_
         minio_print_error("[%s] Server structure incomplete, no bucket connection possible!\n",
                           LOGGING_METHOD_PREFIX_MINIO_BUILDHASHLIST);
     }
+
+    end_clock(clock, "MinIO: BuildHashList");
 
     minio_print_debug("[%s] Building hash list done.\n",
                       LOGGING_METHOD_PREFIX_MINIO_BUILDHASHLIST);
@@ -960,6 +965,6 @@ hash_data_t *minio_retrieve_data(server_struct_t *server_struct, gchar *hash_str
     g_free(cmptype);
     g_free(uncmplen);
 
-    end_clock(clock, "Retrieve data");
+    end_clock(clock, "MinIO: Retrieve data");
     return hash_data;
 }

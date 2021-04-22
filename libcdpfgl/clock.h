@@ -28,10 +28,10 @@
 #define _CLOCK_H_
 
 /** Write clock output to file for tests */
-#define CLOCK_T_OUTPUT_TO_FILE (0)
+#define CLOCK_T_OUTPUT_TO_FILE (1)
 
 /** Filepath for clock output */
-#define CLOCK_T_PATH ("/usr/local/etc/cdpfgl/clockfile.txt")
+#define CLOCK_T_PATH ("/var/tmp/cdpfgl/clocks/clockfile.txt")
 
 /**
  * @struct a_clock_t

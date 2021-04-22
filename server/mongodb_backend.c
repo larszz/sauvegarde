@@ -411,7 +411,7 @@ void mongodb_store_smeta(server_struct_t *server_struct, server_meta_data_t *ser
     mongodb_backend_t *backend;
     char *collection_name;
 
-
+    a_clock_t *clock = new_clock_t();
     mongodb_print_debug("[%s] Insert data...\n", LOGGING_METHOD_PREFIX_MONGODB_STORE_SMETA);
     if (server_meta != NULL && server_meta->hostname != NULL && server_meta->meta != NULL)
     {
@@ -460,6 +460,8 @@ void mongodb_store_smeta(server_struct_t *server_struct, server_meta_data_t *ser
         mongodb_print_error("[%s] Error: Server_meta or its hostname/meta NULL!\n",
                             LOGGING_METHOD_PREFIX_MONGODB_STORE_SMETA);
     }
+
+    end_clock(clock, "MongoDB: StoreMetaData");
 
     mongodb_print_debug("[%s] Insert done.\n\n", LOGGING_METHOD_PREFIX_MONGODB_STORE_SMETA);
 }
@@ -700,6 +702,7 @@ gchar *mongodb_get_list_of_files(server_struct_t *server_struct, query_t *query)
     gchar *json_string = NULL;
 
 
+    a_clock_t *clock = new_clock_t();
     // Generate name of collection to use
     if (query != NULL)
     {
@@ -787,6 +790,8 @@ gchar *mongodb_get_list_of_files(server_struct_t *server_struct, query_t *query)
     {
         mongodb_print_error("[%s] No query passed!\n", LOGGING_METHOD_PREFIX_MONGODB_GET_LIST_OF_FILES);
     }
+
+    end_clock(clock, "MongoDB: GetListOfFiles");
 
     return json_string;
 }

@@ -11,6 +11,23 @@ way. Compile the project and put `cdpfglserver` on the machine where you want to
 save your files. Let `cdpfglclient` crawl your files to save them (on your client). 
 If needed use `cdpfglrestore` to restore files or directories.
 
+## Info for new backends (MongoDB, MinIO)
+### CMake
+For a personally easier development, the server built has been executed in a created Cmake build file.
+To run it, the following command should work, used in the project directory:
+
+    cmake --build ./cmake-build-debug --target server
+
+Client and Restore Client still have to be built by the commands below.
+
+
+### Additional libraries
+Needed libraries have been added to the "mandatory" list below.
+They should be found by the build script if their files are added to the default include directories.
+
+Optional linking of libraries and checks before usage later have not been implemented yet.
+
+
 ## License
 
 This is free software and real open source as GPLv3 is used for this
@@ -43,6 +60,8 @@ stated between () and recommended version between []):
   * `sqlite`         (3.7.15)
   * `jansson`        (2.5)    [2.7]
   * `zlib`           (1.2.8)
+  * `libmongoc`      (1.7) {for MongoDB backend}
+  * `libs3` {for MinIO backend}
 
 jansson's library version is quite recent but it compiles nicely and
 depends on nothing (as far as I know).
